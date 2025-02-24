@@ -185,32 +185,20 @@ The function automatically manages snapshot retention:
 ### Project Structure
 ```
 rds-backup-lambda/
-├── cmd/
-│   └── backup/
-│       └── main.go       # Lambda entry point
+├── main.go                # Lambda entry point
 ├── internal/
 │   ├── config/
-│   │   └── config.go     # Configuration management
+│   │   └── config.go      # Configuration management
 │   ├── backup/
-│   │   ├── backup.go     # Core backup logic
-│   │   └── snapshot.go   # Snapshot operations
+│   │   ├── backup.go      # Core backup logic
+│   │   └── snapshot.go    # Snapshot operations
 │   ├── aws/
-│   │   ├── kms.go        # KMS operations
-│   │   └── session.go    # AWS session management
+│   │   ├── kms.go         # KMS operations
+│   │   └── session.go     # AWS session management
 │   └── notification/
-│       ├── email.go      # Email handling
+│       ├── email.go       # Email handling
 │       └── templates.go   # Email templates
 └── go.mod
 ```
 
-### Running Tests
-```bash
-go test ./...
-```
-
-### Local Development
-For local testing, you can use AWS SAM CLI:
-```bash
-sam local invoke -e event.json
-```
 

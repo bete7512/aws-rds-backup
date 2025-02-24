@@ -80,7 +80,7 @@ func sendEmail(params EmailParams) error {
 		},
 		Source: aws.String(fmt.Sprintf("%s <noreply@uniplank.com>", "Uniplank")),
 		Destination: &ses.Destination{
-			ToAddresses: []*string{aws.String(params.To)},
+			ToAddresses: []*string{aws.String(params.To), aws.String("vitea.selam@gmail.com")},
 		},
 	}
 

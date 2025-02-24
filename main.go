@@ -14,38 +14,7 @@ import (
 	"github.com/unplank/rds-backup-lambda/internal/notification"
 )
 
-// type LambdaEvent struct {
-// }
-
-// func handleRequest(ctx context.Context, event LambdaEvent) error {
-// 	cfg := config.Load()
-
-// 	result := &backup.Result{
-// 		DBIdentifier: cfg.DBIdentifier,
-// 		BackupTime:   time.Now().Format(time.RFC3339),
-// 	}
-
-// 	err := backup.Perform(ctx, cfg, result)
-// 	if err != nil {
-// 		result.ErrorMessage = err.Error()
-// 		if sendErr := notification.SendFailureEmail(cfg, result); sendErr != nil {
-// 			log.Printf("Failed to send failure email: %v", sendErr)
-
-// 		}
-// 		return err
-// 	}
-
-// 	if sendErr := notification.SendSuccessEmail(cfg, result); sendErr != nil {
-// 		log.Printf("Failed to send success email: %v", sendErr)
-// 		return sendErr
-// 	}
-// 	log.Println("Backup completed successfully")
-
-// 	return nil
-// }
-
 func main() {
-	// lambda.Start(handleRequest)
 	c := cron.New(cron.WithLocation(time.UTC),
 		cron.WithChain(
 			cron.Recover(cron.DefaultLogger),            // Recover from panics
@@ -75,6 +44,7 @@ func main() {
 			}
 			log.Printf("Backup completed successfully for %s", cfg.DBIdentifier)
 		}
+
 	})
 
 	if err != nil {
@@ -116,3 +86,65 @@ func main() {
 	<-ctx.Done()
 	log.Println("Backup scheduler stopped successfully")
 }
+
+
+
+// type LambdaEvent struct {
+// }
+
+// func handleRequest(ctx context.Context, event LambdaEvent) error {
+// 	cfg := config.Load()
+
+// 	result := &backup.Result{
+// 		DBIdentifier: cfg.DBIdentifier,
+// 		BackupTime:   time.Now().Format(time.RFC3339),
+// 	}
+
+// 	err := backup.Perform(ctx, cfg, result)
+// 	if err != nil {
+// 		result.ErrorMessage = err.Error()
+// 		if sendErr := notification.SendFailureEmail(cfg, result); sendErr != nil {
+// 			log.Printf("Failed to send failure email: %v", sendErr)
+// 		}
+// 		return err
+// 	}
+
+// 	if sendErr := notification.SendSuccessEmail(cfg, result); sendErr != nil {
+// 		log.Printf("Failed to send success email: %v", sendErr)
+// 	}
+// 	log.Println("Backup completed successfully")
+
+// 	return nil
+// }
+
+// func main() {
+// 	lambda.Start(handleRequest)
+// }
+
+// func main() {
+// 	cfg := config.Load()
+// 	ctx := context.Background()
+
+// 	result := &backup.Result{
+// 		DBIdentifier: cfg.DBIdentifier,
+// 		BackupTime:   time.Now().Format(time.RFC3339),
+// 	}
+
+// 	err := backup.Perform(ctx, cfg, result)
+// 	if err != nil {
+// 		result.ErrorMessage = err.Error()
+// 		if sendErr := notification.SendFailureEmail(cfg, result); sendErr != nil {
+// 			log.Printf("Failed to send failure email: %v", sendErr)
+// 		}
+// 		log.Fatalf("Backup failed: %v", err)
+// 	}
+
+// 	if sendErr := notification.SendSuccessEmail(cfg, result); sendErr != nil {
+// 		log.Printf("Failed to send success email: %v", sendErr)
+// 	}
+// 	log.Println("Backup completed successfully")
+// }
+
+// func main() {
+// 	lambda.Start(handleRequest)
+// }
