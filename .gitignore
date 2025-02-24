@@ -6,3 +6,6 @@ output.txt
 
 
 command.sh
+rds-backup-service
+rds-backup-service.pid
+logs/
