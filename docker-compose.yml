@@ -1,0 +1,11 @@
+name: rdsbackup
+services:
+  server:
+    container_name: ${COMPOSE_PROJECT_NAME}-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    network_mode: host
+    env_file:
+      - .env
