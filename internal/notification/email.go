@@ -14,7 +14,8 @@ import (
 )
 
 type EmailParams struct {
-	To      string
+	// To      string
+	Emails  []string
 	Subject string
 	Body    string
 }
@@ -26,7 +27,8 @@ func SendSuccessEmail(cfg *config.Config, result *backup.Result) error {
 	}
 
 	return sendEmail(EmailParams{
-		To:      cfg.AdminEmail,
+		// To:      cfg.AdminEmail,
+		Emails:  cfg.Emails,
 		Subject: "RDS Backup Successful",
 		Body:    body,
 	})
@@ -39,7 +41,8 @@ func SendFailureEmail(cfg *config.Config, result *backup.Result) error {
 	}
 
 	return sendEmail(EmailParams{
-		To:      cfg.AdminEmail,
+		// To:      cfg.AdminEmail,
+		Emails:  cfg.Emails,
 		Subject: "RDS Backup Failed",
 		Body:    body,
 	})
@@ -80,7 +83,7 @@ func sendEmail(params EmailParams) error {
 		},
 		Source: aws.String(fmt.Sprintf("%s <noreply@uniplank.com>", "Uniplank")),
 		Destination: &ses.Destination{
-			ToAddresses: []*string{aws.String(params.To), aws.String("vitea.selam@gmail.com")},
+			ToAddresses: aws.StringSlice(params.Emails),
 		},
 	}
 

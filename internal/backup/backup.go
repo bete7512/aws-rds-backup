@@ -28,7 +28,6 @@ func Perform(ctx context.Context, cfg *config.Config, result *Result) error {
 	if err != nil {
 		return fmt.Errorf("failed to get source KMS key ARN: %w", err)
 	}
-
 	targetKMSKeyArn, err := aws.GetKMSKeyARN(ctx, cfg.TargetRegion, cfg.KMSKeyID)
 	if err != nil {
 		return fmt.Errorf("failed to get target KMS key ARN: %w", err)

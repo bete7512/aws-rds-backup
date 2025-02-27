@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -19,6 +20,7 @@ type Config struct {
 	KeepSourceSnapshot bool
 	StoreToSourceS3    bool
 	AdminEmail         string
+	Emails             []string
 }
 
 func Load() *Config {
@@ -35,7 +37,7 @@ func Load() *Config {
 			}
 			workDir = filepath.Dir(workDir)
 		}
-		
+
 		if err != nil {
 			log.Println("Warning: .env file not found, using existing environment variables")
 		}
@@ -52,6 +54,7 @@ func Load() *Config {
 		"ADMIN_EMAIL",
 		"KEEP_SOURCE_SNAPSHOT",
 		"STORE_TO_SOURCE_S3",
+		"ADMIN_EMAILS",
 	}
 
 	for _, envVar := range requiredEnvVars {
@@ -61,18 +64,23 @@ func Load() *Config {
 	}
 
 	return &Config{
-		SourceRegion:       os.Getenv("SOURCE_REGION"),
-		TargetRegion:       os.Getenv("TARGET_REGION"),
-		DBIdentifier:       os.Getenv("DB_IDENTIFIER"),
-		SourceBucket:       os.Getenv("SOURCE_BUCKET"),
-		TargetBucket:       os.Getenv("TARGET_BUCKET"),
-		KMSKeyID:           os.Getenv("KMS_KEY_ID"),
-		ExportRoleARN:      os.Getenv("EXPORT_ROLE_ARN"),
-		AdminEmail:         os.Getenv("ADMIN_EMAIL"),
+		SourceRegion:  os.Getenv("SOURCE_REGION"),
+		TargetRegion:  os.Getenv("TARGET_REGION"),
+		DBIdentifier:  os.Getenv("DB_IDENTIFIER"),
+		SourceBucket:  os.Getenv("SOURCE_BUCKET"),
+		TargetBucket:  os.Getenv("TARGET_BUCKET"),
+		KMSKeyID:      os.Getenv("KMS_KEY_ID"),
+		ExportRoleARN: os.Getenv("EXPORT_ROLE_ARN"),
+		AdminEmail:    os.Getenv("ADMIN_EMAIL"),
+		Emails: func() []string {
+			emails := os.Getenv("ADMIN_EMAILS")
+			return strings.Split(emails, ",")
+		}(),
 		KeepSourceSnapshot: os.Getenv("KEEP_SOURCE_SNAPSHOT") == "true",
 		StoreToSourceS3:    os.Getenv("STORE_TO_SOURCE_S3") == "true",
 	}
 }
+
 // package config
 
 // import (
