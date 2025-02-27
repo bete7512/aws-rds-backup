@@ -17,4 +17,5 @@ sudo systemctl start rds-backup.service
 
 sudo systemctl status rds-backup.service  
 sudo systemctl stop rds-backup.service   
-sudo journalctl -u rds-backup.service   
+sudo journalctl -u rds-backup.service  
+sudo systemctl restart rds-backup.service

@@ -256,42 +256,7 @@ func copySnapshotToTargetRegion(ctx context.Context, sourceRDS *rds.Client, targ
 
     return targetSnapshotID, nil
 }
-// func copySnapshotToTargetRegion(ctx context.Context, sourceRDS *rds.Client, targetRDS *rds.Client, sourceSnapshotID string, targetKMSKeyArn string) (string, error) {
-// 	snapshot, err := sourceRDS.DescribeDBSnapshots(ctx, &rds.DescribeDBSnapshotsInput{
-// 		DBSnapshotIdentifier: aws.String(sourceSnapshotID),
-// 	})
-// 	if err != nil {
-// 		return "", fmt.Errorf("failed to describe source snapshot: %w", err)
-// 	}
 
-// 	if len(snapshot.DBSnapshots) == 0 {
-// 		return "", fmt.Errorf("no snapshot found with ID: %s", sourceSnapshotID)
-// 	}
-
-// 	sourceSnapshotArn := snapshot.DBSnapshots[0].DBSnapshotArn
-// 	targetSnapshotID := fmt.Sprintf("copy-%s", sourceSnapshotID)
-
-// 	log.Printf("Copying snapshot to target region: %s", targetSnapshotID)
-// 	_, err = targetRDS.CopyDBSnapshot(ctx, &rds.CopyDBSnapshotInput{
-// 		SourceDBSnapshotIdentifier: sourceSnapshotArn,
-// 		TargetDBSnapshotIdentifier: aws.String(targetSnapshotID),
-// 		KmsKeyId:                   aws.String(targetKMSKeyArn),
-// 		CopyTags:                   aws.Bool(true),
-// 	})
-// 	if err != nil {
-// 		return "", fmt.Errorf("failed to start snapshot copy: %w", err)
-// 	}
-
-// 	waiter := rds.NewDBSnapshotAvailableWaiter(targetRDS)
-// 	err = waiter.Wait(ctx, &rds.DescribeDBSnapshotsInput{
-// 		DBSnapshotIdentifier: aws.String(targetSnapshotID),
-// 	}, 2*time.Hour)
-// 	if err != nil {
-// 		return "", fmt.Errorf("error waiting for snapshot: %w", err)
-// 	}
-
-// 	return targetSnapshotID, nil
-// }
 
 func DeleteSnapshot(ctx context.Context, rdsClient *rds.Client, snapshotID string) error {
 	_, err := rdsClient.DeleteDBSnapshot(ctx, &rds.DeleteDBSnapshotInput{
@@ -304,7 +269,7 @@ func DeleteSnapshot(ctx context.Context, rdsClient *rds.Client, snapshotID strin
 }
 
 func CleanupOldSnapshots(ctx context.Context, clients *awsinternal.AWSClients, config *config.Config) error {
-	cutoffTime := time.Now().AddDate(0, 0, -15)
+	cutoffTime := time.Now().AddDate(0, 0, -45)
 
 	if err := deleteOldSnapshots(ctx, clients.SourceRDS, "backup-"+config.DBIdentifier, cutoffTime); err != nil {
 		return fmt.Errorf("failed to cleanup source region snapshots: %w", err)

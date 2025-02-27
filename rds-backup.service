@@ -4,17 +4,15 @@ After=network.target
 
 [Service]
 Type=simple
-User=YOUR_USERNAME
-WorkingDirectory=/path/to/your/app
-ExecStart=/path/to/your/app/rds-backup-service
+User=ubuntu
+WorkingDirectory=/home/ubuntu/Lambda-RDS-Backup-/
+ExecStart=/home/ubuntu/Lambda-RDS-Backup-/rds-backup-service
 Restart=on-failure
 RestartSec=10
-StandardOutput=append:/path/to/your/app/logs/rds-backup.log
-StandardError=append:/path/to/your/app/logs/rds-backup.log
-
+StandardOutput=append:/home/ubuntu/Lambda-RDS-Backup-/logs/rds-backup.log
+StandardError=append:/home/ubuntu/Lambda-RDS-Backup-/logs/rds-backup.log
 # Environment variables if needed
-Environment=AWS_REGION=us-east-1
-# Add more environment variables as needed
+# Environment=
 
 [Install]
 WantedBy=multi-user.target
