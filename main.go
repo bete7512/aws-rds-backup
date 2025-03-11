@@ -55,39 +55,37 @@ func main() {
 	c.Start()
 
 	// Run backup immediately on startup
-	ctx := context.Background()
-	result := &backup.Result{
-		DBIdentifier: cfg.DBIdentifier,
-		BackupTime:   time.Now().Format(time.RFC3339),
-	}
+	// ctx := context.Background()
+	// result := &backup.Result{
+	// 	DBIdentifier: cfg.DBIdentifier,
+	// 	BackupTime:   time.Now().Format(time.RFC3339),
+	// }
 
-	log.Printf("Running initial backup for %s", cfg.DBIdentifier)
-	err = backup.Perform(ctx, cfg, result)
-	if err != nil {
-		result.ErrorMessage = err.Error()
-		if sendErr := notification.SendFailureEmail(cfg, result); sendErr != nil {
-			log.Printf("Failed to send failure email: %v", sendErr)
-		}
-		log.Printf("Initial backup failed: %v", err)
-	} else {
-		if sendErr := notification.SendSuccessEmail(cfg, result); sendErr != nil {
-			log.Printf("Failed to send success email: %v", sendErr)
-		}
-		log.Printf("Initial backup completed successfully for %s", cfg.DBIdentifier)
-	}
+	// log.Printf("Running initial backup for %s", cfg.DBIdentifier)
+	// err = backup.Perform(ctx, cfg, result)
+	// if err != nil {
+	// 	result.ErrorMessage = err.Error()
+	// 	if sendErr := notification.SendFailureEmail(cfg, result); sendErr != nil {
+	// 		log.Printf("Failed to send failure email: %v", sendErr)
+	// 	}
+	// 	log.Printf("Initial backup failed: %v", err)
+	// } else {
+	// 	if sendErr := notification.SendSuccessEmail(cfg, result); sendErr != nil {
+	// 		log.Printf("Failed to send success email: %v", sendErr)
+	// 	}
+	// 	log.Printf("Initial backup completed successfully for %s", cfg.DBIdentifier)
+	// }
 
 	// Handle graceful shutdown
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	<-sig
 
-	log.Println("Shutting down backup scheduler...")
-	ctx = c.Stop()
-	<-ctx.Done()
+	// log.Println("Shutting down backup scheduler...")
+	// ctx = c.Stop()
+	// <-ctx.Done()
 	log.Println("Backup scheduler stopped successfully")
 }
-
-
 
 // type LambdaEvent struct {
 // }
